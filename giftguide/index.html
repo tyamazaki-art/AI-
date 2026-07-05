@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GIFT COMPASS — 彼への誕生日プレゼント診断＆2026トレンド</title>
+<title>GIFT COMPASS — 彼への誕生日プレゼント診断＆最新トレンド</title>
 <meta name="description" content="20〜60代の女性のための、男性への誕生日プレゼント診断。関係性・年代・予算から最適な複数候補を、選ばれた理由つきで提案します。">
 <style>
 /* ============================================================
@@ -203,29 +203,29 @@ footer .fbot{margin-top:40px;padding-top:24px;border-top:1px solid #44403C;font-
 <!-- ============ Hero ============ -->
 <section class="hero">
   <div class="wrap hero-inner reveal">
-    <p class="eyebrow">Birthday gift finder for him · 2026</p>
+    <p class="eyebrow">Birthday gift finder for him</p>
     <h1>彼への贈り物、<br>もう<em>迷わない</em>。</h1>
     <p class="lead">恋人、夫、お父さん、上司、友人——。<br>
       関係性と予算からあなたに代わって考え、<strong>最適な複数の候補</strong>を「選ばれた理由」つきでご提案します。</p>
     <div class="hero-cta">
       <a href="#diagnosis" class="btn btn-primary">1分で診断する →</a>
-      <a href="#trends" class="btn btn-ghost">2026のトレンドを見る</a>
+      <a href="#trends" class="btn btn-ghost">最新のトレンドを見る</a>
     </div>
     <div class="hero-meta">
-      <div><span>2026</span><small>最新トレンド反映</small></div>
+      <div><span>随時</span><small>トレンドを更新</small></div>
       <div><span>20<span style="font-size:20px;">点+</span></span><small>厳選ギフト</small></div>
       <div><span>5<span style="font-size:20px;">問</span></span><small>約1分で完了</small></div>
     </div>
   </div>
 </section>
 
-<!-- ============ Trends 2026 ============ -->
+<!-- ============ Trends ============ -->
 <section id="trends">
   <div class="wrap">
     <div class="sec-head reveal">
-      <p class="eyebrow">Trends 2026</p>
-      <h2>今年、彼が喜ぶ贈り物の潮流</h2>
-      <p class="lead">モノより「時間」と「体験」。2026年の男性ギフトは、日常を少し上質にするアイテムが人気です。</p>
+      <p class="eyebrow">Latest Trends</p>
+      <h2>いま、彼が喜ぶ贈り物の潮流</h2>
+      <p class="lead">モノより「時間」と「体験」。最新の男性ギフトは、日常を少し上質にするアイテムが人気です。</p>
     </div>
     <div class="trend-grid">
       <div class="trend-card reveal">
@@ -401,7 +401,7 @@ footer .fbot{margin-top:40px;padding-top:24px;border-top:1px solid #44403C;font-
     </div>
     <p class="fnote">彼への誕生日プレゼントに迷う女性のための、診断＆トレンドまとめ。掲載の価格帯・候補は一般的な目安であり、実在の在庫や販売を示すものではありません。診断結果は参考としてお楽しみください。</p>
     <div class="fbot">
-      <span>© 2026 GIFT COMPASS</span>
+      <span>© <span id="year">2026</span> GIFT COMPASS</span>
       <span>入力情報は端末内でのみ処理され、送信・保存されません。</span>
     </div>
   </div>
@@ -521,7 +521,7 @@ function scoreGift(g, ans){
   if(g.job.includes(ans.job)){ score+=2; reasons.push(JOB_LABEL[ans.job]+"向き"); }
   for(const it of ans.interests){ if(g.interests.includes(it)){ score+=2;
     intReasons.push(INT_LABEL[it]+"好きに"); } }
-  if(g.trend){ score+=1; reasons.push("2026トレンド"); }
+  if(g.trend){ score+=1; reasons.push("最新トレンド"); }
   // surface the most personal reasons (interest matches) first
   reasons.unshift(...intReasons);
   // budget fit bonus: closer to budget cap (uses more of it) gets a touch more
@@ -560,7 +560,7 @@ function renderResults(list, ans){
     const card=el('div','gift-card');
     const thumb=el('div','gift-thumb'); thumb.textContent=r.g.ico; card.appendChild(thumb);
     const body=el('div','gift-body');
-    body.appendChild(el('div','gift-rank','No.'+(i+1)+(r.trend?' ・ 2026 trend':'')));
+    body.appendChild(el('div','gift-rank','No.'+(i+1)+(r.trend?' ・ 最新トレンド':'')));
     const hr=el('div','gift-head-row');
     hr.appendChild(el('h3',null,r.g.name));
     body.appendChild(hr);
@@ -628,6 +628,9 @@ document.getElementById('resetBtn').addEventListener('click',function(){
   document.getElementById('results').classList.add('results-hidden');
 });
 
+// ---- footer year: always current ----
+(function(){ const y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear(); })();
+
 // ---- catalog render ----
 (function renderCatalog(){
   const grid=document.getElementById('catalogGrid');
@@ -635,7 +638,7 @@ document.getElementById('resetBtn').addEventListener('click',function(){
     const it=el('div','cat-item');
     it.appendChild(el('div','ci-ico',g.ico));
     it.appendChild(el('h4',null,g.name));
-    it.appendChild(el('div','ci-price','¥'+g.price.toLocaleString()+(g.trend?' ・ 2026':'')));
+    it.appendChild(el('div','ci-price','¥'+g.price.toLocaleString()+(g.trend?' ・ 最新':'')));
     grid.appendChild(it);
   });
 })();
