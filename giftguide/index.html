@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GIFT COMPASS — 彼への誕生日プレゼント診断＆2026トレンド</title>
+<meta name="description" content="20〜60代の女性のための、男性への誕生日プレゼント診断。関係性・年代・予算から最適な複数候補を、選ばれた理由つきで提案します。">
+<style>
+/* ============================================================
+   GIFT COMPASS — design tokens (see DESIGN.md)
+   White base / large type / one terracotta accent
+   ============================================================ */
+:root{
+  --bg:#FBFAF7;
+  --surface:#FFFFFF;
+  --ink:#1C1917;
+  --ink-soft:#57534E;
+  --line:#E7E2DA;
+  --accent:#B4553D;
+  --accent-soft:#F4E9E3;
+  --gold:#A8792C;
+  --r:4px;
+  --maxw:1120px;
+  --serif:Georgia,"Times New Roman","Hiragino Mincho ProN","Yu Mincho",serif;
+  --sans:system-ui,-apple-system,"Hiragino Kaku Gothic ProN","Yu Gothic UI","Meiryo",sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:var(--sans);
+  font-size:clamp(17px,1.6vw,20px);   /* 文字大きめ */
+  line-height:1.9;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:var(--serif);font-weight:600;line-height:1.15;letter-spacing:.01em;}
+a{color:inherit;text-decoration:none;}
+img{max-width:100%;}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
+.eyebrow{
+  font-family:var(--sans);font-size:13px;letter-spacing:.32em;text-transform:uppercase;
+  color:var(--accent);font-weight:700;
+}
+.lead{color:var(--ink-soft);}
+
+/* buttons */
+.btn{
+  display:inline-flex;align-items:center;gap:.6em;cursor:pointer;border:none;
+  font-family:var(--sans);font-size:17px;font-weight:600;letter-spacing:.02em;
+  padding:18px 34px;border-radius:var(--r);transition:transform .18s ease, background .18s;
+}
+.btn-primary{background:var(--accent);color:#fff;}
+.btn-primary:hover{transform:translateY(-2px);background:#9d4632;}
+.btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line);}
+.btn-ghost:hover{border-color:var(--ink);}
+
+/* ============ Header ============ */
+header{
+  position:sticky;top:0;z-index:50;background:rgba(251,250,247,.86);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
+}
+.nav{display:flex;align-items:center;justify-content:space-between;height:74px;}
+.brand{display:flex;align-items:center;gap:11px;font-family:var(--serif);font-size:23px;font-weight:600;letter-spacing:.02em;}
+.brand .mark{width:30px;height:30px;flex:none;}
+.nav-links{display:flex;gap:34px;font-size:15px;font-weight:500;}
+.nav-links a{color:var(--ink-soft);transition:color .15s;}
+.nav-links a:hover{color:var(--accent);}
+@media(max-width:720px){.nav-links{display:none;}}
+
+/* ============ Hero ============ */
+.hero{padding:clamp(70px,11vw,130px) 0 clamp(56px,8vw,96px);}
+.hero-inner{max-width:900px;}
+.hero h1{font-size:clamp(44px,8vw,92px);letter-spacing:-.01em;}
+.hero h1 em{font-style:italic;color:var(--accent);}
+.hero p{font-size:clamp(18px,2vw,23px);color:var(--ink-soft);margin-top:30px;max-width:640px;}
+.hero-cta{display:flex;gap:16px;flex-wrap:wrap;margin-top:44px;}
+.hero-meta{margin-top:52px;display:flex;gap:44px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:30px;}
+.hero-meta div span{display:block;font-family:var(--serif);font-size:34px;color:var(--ink);line-height:1;}
+.hero-meta div small{font-size:13px;color:var(--ink-soft);letter-spacing:.06em;}
+
+/* ============ Section shell ============ */
+section{padding:clamp(80px,12vw,150px) 0;}
+.sec-head{max-width:720px;margin-bottom:clamp(44px,6vw,72px);}
+.sec-head h2{font-size:clamp(30px,5vw,52px);margin-top:16px;}
+.sec-head p{color:var(--ink-soft);margin-top:20px;}
+
+/* ============ Trends ============ */
+.trend-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:28px;}
+.trend-card{
+  background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  padding:38px 32px;transition:transform .2s ease, box-shadow .2s ease;
+}
+.trend-card:hover{transform:translateY(-4px);box-shadow:0 18px 40px -24px rgba(28,25,23,.28);}
+.trend-card .ico{font-size:38px;line-height:1;}
+.trend-card h3{font-size:24px;margin:22px 0 12px;}
+.trend-card p{font-size:16px;color:var(--ink-soft);line-height:1.8;}
+.trend-card .tag{display:inline-block;margin-top:20px;font-size:12px;letter-spacing:.08em;
+  color:var(--accent);background:var(--accent-soft);padding:6px 12px;border-radius:100px;font-weight:700;}
+
+/* ============ How it works ============ */
+.how{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:40px;}
+.step{position:relative;padding-top:26px;}
+.step .num{font-family:var(--serif);font-size:15px;color:var(--accent);font-weight:700;letter-spacing:.2em;}
+.step h3{font-size:22px;margin:14px 0 10px;}
+.step p{font-size:16px;color:var(--ink-soft);line-height:1.8;}
+
+/* ============ Diagnosis form ============ */
+.diag{background:var(--accent-soft);}
+.form-card{
+  background:var(--surface);border:1px solid var(--line);border-radius:16px;
+  padding:clamp(28px,4vw,52px);max-width:880px;margin:0 auto;
+  box-shadow:0 30px 70px -50px rgba(28,25,23,.5);
+}
+.field{margin-bottom:38px;}
+.field:last-of-type{margin-bottom:8px;}
+.field > label.q{display:block;font-family:var(--serif);font-size:22px;margin-bottom:6px;}
+.field .hint{font-size:14px;color:var(--ink-soft);margin-bottom:18px;}
+.opts{display:flex;flex-wrap:wrap;gap:12px;}
+.opt{position:relative;}
+.opt input{position:absolute;opacity:0;width:0;height:0;}
+.opt label{
+  display:inline-block;cursor:pointer;padding:13px 22px;border:1px solid var(--line);
+  border-radius:100px;font-size:16px;color:var(--ink-soft);background:var(--bg);
+  transition:all .15s ease;user-select:none;
+}
+.opt label:hover{border-color:var(--accent);color:var(--ink);}
+.opt input:checked + label{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600;}
+.opt input:focus-visible + label{outline:2px solid var(--ink);outline-offset:2px;}
+.form-actions{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:14px;}
+.form-error{color:var(--accent);font-size:15px;font-weight:600;}
+
+/* ============ Results ============ */
+#results{scroll-margin-top:90px;}
+.results-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:26px;margin-top:12px;}
+.gift-card{
+  background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;
+  display:flex;flex-direction:column;transition:transform .2s ease, box-shadow .2s ease;
+}
+.gift-card:hover{transform:translateY(-4px);box-shadow:0 20px 44px -26px rgba(28,25,23,.3);}
+.gift-thumb{height:150px;display:flex;align-items:center;justify-content:center;font-size:64px;
+  background:linear-gradient(135deg,var(--accent-soft),#fff);border-bottom:1px solid var(--line);}
+.gift-body{padding:26px 24px 28px;display:flex;flex-direction:column;flex:1;}
+.gift-rank{font-size:12px;letter-spacing:.14em;color:var(--accent);font-weight:700;text-transform:uppercase;}
+.gift-body h3{font-size:22px;margin:8px 0 10px;}
+.gift-body .price{font-family:var(--serif);font-size:19px;color:var(--ink);}
+.gift-body .desc{font-size:15px;color:var(--ink-soft);line-height:1.75;margin:12px 0 18px;}
+.reasons{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;}
+.reason{font-size:12px;background:var(--accent-soft);color:var(--accent);padding:5px 11px;border-radius:100px;font-weight:600;}
+.match{margin-left:auto;font-size:13px;color:var(--gold);font-weight:700;}
+.gift-head-row{display:flex;align-items:baseline;gap:10px;}
+#resultSummary{color:var(--ink-soft);margin-bottom:8px;}
+.results-hidden{display:none;}
+
+/* ============ Catalog ============ */
+.catalog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:18px;}
+.cat-item{border:1px solid var(--line);border-radius:10px;padding:22px 20px;background:var(--surface);}
+.cat-item .ci-ico{font-size:32px;}
+.cat-item h4{font-family:var(--serif);font-size:18px;font-weight:600;margin:12px 0 4px;}
+.cat-item .ci-price{font-size:14px;color:var(--ink-soft);}
+
+/* ============ Footer ============ */
+footer{background:var(--ink);color:#D6D3D1;padding:70px 0 50px;}
+footer .brand{color:#fff;}
+footer .fnote{font-size:14px;color:#A8A29E;max-width:640px;margin-top:22px;line-height:1.8;}
+footer .fbot{margin-top:40px;padding-top:24px;border-top:1px solid #44403C;font-size:13px;color:#A8A29E;
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+
+/* ============ Reveal animation ============ */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease, transform .7s ease;}
+.reveal.in{opacity:1;transform:none;}
+@media(prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none;transition:none;}
+  html{scroll-behavior:auto;}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ Header ============ -->
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#top">
+      <svg class="mark" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <circle cx="16" cy="16" r="15" stroke="#B4553D" stroke-width="2"/>
+        <path d="M16 6 L19 16 L16 26 L13 16 Z" fill="#B4553D"/>
+        <circle cx="16" cy="16" r="2.4" fill="#fff"/>
+      </svg>
+      GIFT COMPASS
+    </a>
+    <nav class="nav-links">
+      <a href="#trends">トレンド</a>
+      <a href="#how">使い方</a>
+      <a href="#diagnosis">診断する</a>
+      <a href="#catalog">ギフト一覧</a>
+    </nav>
+    <a href="#diagnosis" class="btn btn-primary" style="padding:12px 24px;font-size:15px;">診断をはじめる</a>
+  </div>
+</header>
+
+<span id="top"></span>
+
+<!-- ============ Hero ============ -->
+<section class="hero">
+  <div class="wrap hero-inner reveal">
+    <p class="eyebrow">Birthday gift finder for him · 2026</p>
+    <h1>彼への贈り物、<br>もう<em>迷わない</em>。</h1>
+    <p class="lead">恋人、夫、お父さん、上司、友人——。<br>
+      関係性と予算からあなたに代わって考え、<strong>最適な複数の候補</strong>を「選ばれた理由」つきでご提案します。</p>
+    <div class="hero-cta">
+      <a href="#diagnosis" class="btn btn-primary">1分で診断する →</a>
+      <a href="#trends" class="btn btn-ghost">2026のトレンドを見る</a>
+    </div>
+    <div class="hero-meta">
+      <div><span>2026</span><small>最新トレンド反映</small></div>
+      <div><span>20<span style="font-size:20px;">点+</span></span><small>厳選ギフト</small></div>
+      <div><span>5<span style="font-size:20px;">問</span></span><small>約1分で完了</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Trends 2026 ============ -->
+<section id="trends">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">Trends 2026</p>
+      <h2>今年、彼が喜ぶ贈り物の潮流</h2>
+      <p class="lead">モノより「時間」と「体験」。2026年の男性ギフトは、日常を少し上質にするアイテムが人気です。</p>
+    </div>
+    <div class="trend-grid">
+      <div class="trend-card reveal">
+        <div class="ico">🎟️</div>
+        <h3>体験ギフト</h3>
+        <p>サウナ、レストラン、ものづくり教室。記憶に残る「コト」を贈るトレンドが定着。</p>
+        <span class="tag"># 思い出に残る</span>
+      </div>
+      <div class="trend-card reveal">
+        <div class="ico">🌱</div>
+        <h3>サステナブル</h3>
+        <p>環境配慮の素材やエシカルブランド。「選ぶ人のセンス」が伝わる贈り物へ。</p>
+        <span class="tag"># 上質・長く使える</span>
+      </div>
+      <div class="trend-card reveal">
+        <div class="ico">⌚</div>
+        <h3>スマートガジェット</h3>
+        <p>睡眠計測リングやワイヤレスイヤホンなど、健康と効率を支える最新ガジェット。</p>
+        <span class="tag"># 実用・最先端</span>
+      </div>
+      <div class="trend-card reveal">
+        <div class="ico">🥃</div>
+        <h3>ご褒美消耗品</h3>
+        <p>クラフトビール、スペシャルティコーヒー、名入れの日用品。気軽で外さない鉄板。</p>
+        <span class="tag"># 失敗しない</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ How it works ============ -->
+<section id="how" class="how">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">How it works</p>
+      <h2>3ステップで、候補が絞れる</h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="num">STEP 01</div>
+        <h3>5つの質問に答える</h3>
+        <p>相手の年代・あなたとの関係性・職業タイプ・予算・こだわりを選ぶだけ。</p>
+      </div>
+      <div class="step reveal">
+        <div class="num">STEP 02</div>
+        <h3>相性を自動分析</h3>
+        <p>20点以上のギフトを、関係性やトレンドと照らして独自スコアで採点します。</p>
+      </div>
+      <div class="step reveal">
+        <div class="num">STEP 03</div>
+        <h3>複数候補を理由つきで提示</h3>
+        <p>「なぜ選ばれたか」のタグ付きで上位候補を並べて比較。最後の一押しに。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Diagnosis ============ -->
+<section id="diagnosis" class="diag">
+  <div class="wrap">
+    <div class="sec-head reveal" style="text-align:center;margin-left:auto;margin-right:auto;">
+      <p class="eyebrow">Diagnosis</p>
+      <h2>あなたの「彼」を教えてください</h2>
+      <p class="lead">選択式なので約1分。入力内容はこの端末内だけで処理され、どこにも送信されません。</p>
+    </div>
+
+    <form class="form-card reveal" id="giftForm" novalidate>
+      <!-- Q1 age -->
+      <div class="field">
+        <label class="q">Q1. 相手の年代は？</label>
+        <div class="hint">おおよそで大丈夫です。</div>
+        <div class="opts" data-group="age">
+          <span class="opt"><input type="radio" name="age" id="age20" value="20"><label for="age20">20代</label></span>
+          <span class="opt"><input type="radio" name="age" id="age30" value="30"><label for="age30">30代</label></span>
+          <span class="opt"><input type="radio" name="age" id="age40" value="40"><label for="age40">40代</label></span>
+          <span class="opt"><input type="radio" name="age" id="age50" value="50"><label for="age50">50代</label></span>
+          <span class="opt"><input type="radio" name="age" id="age60" value="60"><label for="age60">60代〜</label></span>
+        </div>
+      </div>
+      <!-- Q2 relation -->
+      <div class="field">
+        <label class="q">Q2. あなたとの関係は？</label>
+        <div class="opts" data-group="relation">
+          <span class="opt"><input type="radio" name="relation" id="rel1" value="lover"><label for="rel1">恋人・パートナー</label></span>
+          <span class="opt"><input type="radio" name="relation" id="rel2" value="husband"><label for="rel2">夫</label></span>
+          <span class="opt"><input type="radio" name="relation" id="rel3" value="father"><label for="rel3">父・義父</label></span>
+          <span class="opt"><input type="radio" name="relation" id="rel4" value="work"><label for="rel4">上司・同僚</label></span>
+          <span class="opt"><input type="radio" name="relation" id="rel5" value="friend"><label for="rel5">友人・兄弟</label></span>
+        </div>
+      </div>
+      <!-- Q3 job -->
+      <div class="field">
+        <label class="q">Q3. 職業・ライフスタイルのタイプは？</label>
+        <div class="opts" data-group="job">
+          <span class="opt"><input type="radio" name="job" id="job1" value="business"><label for="job1">ビジネス・オフィス系</label></span>
+          <span class="opt"><input type="radio" name="job" id="job2" value="creative"><label for="job2">クリエイティブ系</label></span>
+          <span class="opt"><input type="radio" name="job" id="job3" value="outdoor"><label for="job3">アウトドア・活動的</label></span>
+          <span class="opt"><input type="radio" name="job" id="job4" value="indoor"><label for="job4">インドア・おうち派</label></span>
+          <span class="opt"><input type="radio" name="job" id="job5" value="exec"><label for="job5">経営者・エグゼクティブ</label></span>
+        </div>
+      </div>
+      <!-- Q4 budget -->
+      <div class="field">
+        <label class="q">Q4. ご予算の上限は？</label>
+        <div class="opts" data-group="budget">
+          <span class="opt"><input type="radio" name="budget" id="bud1" value="3000"><label for="bud1">〜3,000円</label></span>
+          <span class="opt"><input type="radio" name="budget" id="bud2" value="5000"><label for="bud2">〜5,000円</label></span>
+          <span class="opt"><input type="radio" name="budget" id="bud3" value="10000"><label for="bud3">〜10,000円</label></span>
+          <span class="opt"><input type="radio" name="budget" id="bud4" value="30000"><label for="bud4">〜30,000円</label></span>
+          <span class="opt"><input type="radio" name="budget" id="bud5" value="999999"><label for="bud5">30,000円以上</label></span>
+        </div>
+      </div>
+      <!-- Q5 interests (multi) -->
+      <div class="field">
+        <label class="q">Q5. 彼のこだわり・好きなこと（複数選択可）</label>
+        <div class="hint">当てはまるものをいくつでも。</div>
+        <div class="opts" data-group="interests">
+          <span class="opt"><input type="checkbox" name="interests" id="int1" value="gadget"><label for="int1">ガジェット</label></span>
+          <span class="opt"><input type="checkbox" name="interests" id="int2" value="fashion"><label for="int2">ファッション</label></span>
+          <span class="opt"><input type="checkbox" name="interests" id="int3" value="drink"><label for="int3">お酒</label></span>
+          <span class="opt"><input type="checkbox" name="interests" id="int4" value="health"><label for="int4">健康・運動</label></span>
+          <span class="opt"><input type="checkbox" name="interests" id="int5" value="coffee"><label for="int5">コーヒー・食</label></span>
+          <span class="opt"><input type="checkbox" name="interests" id="int6" value="relax"><label for="int6">リラックス</label></span>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">結果を見る →</button>
+        <button type="reset" class="btn btn-ghost" id="resetBtn">リセット</button>
+        <span class="form-error" id="formError" role="alert" aria-live="polite"></span>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ============ Results ============ -->
+<section id="results" class="results-hidden">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">Your matches</p>
+      <h2>あなたへのおすすめ候補</h2>
+      <p class="lead" id="resultSummary"></p>
+    </div>
+    <div class="results-grid" id="resultsGrid"></div>
+    <div style="margin-top:44px;">
+      <a href="#diagnosis" class="btn btn-ghost">条件を変えて再診断</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Catalog ============ -->
+<section id="catalog" style="background:var(--surface);border-top:1px solid var(--line);">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">Gift catalog</p>
+      <h2>診断に使われるギフト一覧</h2>
+      <p class="lead">診断はこの母集団の中から、あなたの条件に合う順で提案します。</p>
+    </div>
+    <div class="catalog-grid" id="catalogGrid"></div>
+  </div>
+</section>
+
+<!-- ============ Footer ============ -->
+<footer>
+  <div class="wrap">
+    <div class="brand" style="font-size:22px;">
+      <svg class="mark" viewBox="0 0 32 32" fill="none" aria-hidden="true" style="width:26px;height:26px;">
+        <circle cx="16" cy="16" r="15" stroke="#B4553D" stroke-width="2"/>
+        <path d="M16 6 L19 16 L16 26 L13 16 Z" fill="#B4553D"/>
+        <circle cx="16" cy="16" r="2.4" fill="#fff"/>
+      </svg>
+      GIFT COMPASS
+    </div>
+    <p class="fnote">彼への誕生日プレゼントに迷う女性のための、診断＆トレンドまとめ。掲載の価格帯・候補は一般的な目安であり、実在の在庫や販売を示すものではありません。診断結果は参考としてお楽しみください。</p>
+    <div class="fbot">
+      <span>© 2026 GIFT COMPASS</span>
+      <span>入力情報は端末内でのみ処理され、送信・保存されません。</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+"use strict";
+/* ==========================================================================
+   GIFT COMPASS — client-side recommendation engine
+   All logic is local. No network, no storage. See DESIGN.md §5.
+   ========================================================================== */
+
+// ---- Gift catalog. Each item tagged for scoring. ----
+const GIFTS=[
+  {id:1, name:"ワイヤレスイヤホン", ico:"🎧", price:12000, budget:12000,
+   rel:["lover","husband","friend","work"], age:[20,30,40], job:["business","creative","outdoor"],
+   interests:["gadget","health"], trend:true,
+   desc:"通勤も運動も快適に。世代を問わず外さない王道ガジェット。"},
+  {id:2, name:"上質レザー名刺入れ", ico:"💼", price:9000, budget:9000,
+   rel:["husband","work","father"], age:[30,40,50], job:["business","exec"],
+   interests:["fashion"], trend:false,
+   desc:"毎日使う小物こそ上質に。ビジネスシーンで一目置かれる贈り物。"},
+  {id:3, name:"クラフトビール飲み比べ", ico:"🍺", price:5000, budget:5000,
+   rel:["husband","friend","father","work"], age:[30,40,50,60], job:["indoor","business"],
+   interests:["drink"], trend:true,
+   desc:"全国の個性派クラフトを飲み比べ。気軽で会話も弾む鉄板ギフト。"},
+  {id:4, name:"スペシャルティコーヒー定期便", ico:"☕", price:6000, budget:6000,
+   rel:["lover","husband","father","work"], age:[20,30,40,50], job:["indoor","creative","business"],
+   interests:["coffee","relax"], trend:true,
+   desc:"毎朝が楽しみになる、香り高い一杯。おうち時間を格上げ。"},
+  {id:5, name:"高級万年筆", ico:"🖋️", price:18000, budget:18000,
+   rel:["father","work","husband"], age:[40,50,60], job:["business","exec"],
+   interests:["fashion"], trend:false,
+   desc:"手書きの品格を贈る。節目の誕生日にふさわしい一生もの。"},
+  {id:6, name:"スマート睡眠リング", ico:"💍", price:28000, budget:28000,
+   rel:["lover","husband","friend"], age:[20,30,40], job:["business","creative","exec"],
+   interests:["gadget","health"], trend:true,
+   desc:"睡眠と体調を計測する最新ウェアラブル。健康志向の彼に。"},
+  {id:7, name:"アロマ&入浴剤セット", ico:"🛁", price:3000, budget:3000,
+   rel:["lover","husband","friend","work"], age:[20,30,40,50], job:["indoor","business"],
+   interests:["relax","health"], trend:true,
+   desc:"一日の疲れをほどく、ご褒美バスタイム。気軽な贈り物に最適。"},
+  {id:8, name:"名入れタンブラー", ico:"🥤", price:4500, budget:4500,
+   rel:["lover","husband","father","friend","work"], age:[20,30,40,50,60], job:["outdoor","business","indoor"],
+   interests:["drink","coffee"], trend:false,
+   desc:"特別感のある名入れ。デスクでもアウトドアでも活躍。"},
+  {id:9, name:"アウトドアマルチツール", ico:"🔧", price:8000, budget:8000,
+   rel:["husband","friend","father"], age:[20,30,40,50], job:["outdoor"],
+   interests:["gadget"], trend:false,
+   desc:"キャンプもDIYもこれ一つ。活動的な彼の相棒に。"},
+  {id:10, name:"上質カシミヤマフラー", ico:"🧣", price:16000, budget:16000,
+   rel:["lover","husband","father"], age:[30,40,50,60], job:["business","exec","creative"],
+   interests:["fashion","relax"], trend:true,
+   desc:"軽くて暖かい、肌ざわりの贅沢。冬生まれの彼へ。"},
+  {id:11, name:"高級レストランペア食事券", ico:"🍽️", price:30000, budget:30000,
+   rel:["lover","husband"], age:[20,30,40,50,60], job:["exec","business","creative"],
+   interests:["drink","coffee","relax"], trend:true,
+   desc:"モノより思い出。二人で過ごす特別な誕生日ディナーを。"},
+  {id:12, name:"サウナ体験ギフトチケット", ico:"🧖", price:10000, budget:10000,
+   rel:["lover","husband","friend","work"], age:[20,30,40,50], job:["business","outdoor","creative"],
+   interests:["relax","health"], trend:true,
+   desc:"ととのう体験を贈る。話題のサウナで心身をリセット。"},
+  {id:13, name:"クラフトジン&グラスセット", ico:"🥃", price:14000, budget:14000,
+   rel:["husband","father","friend"], age:[30,40,50,60], job:["indoor","exec"],
+   interests:["drink"], trend:true,
+   desc:"香り高いクラフトジンと専用グラス。家飲みを格上げする一式。"},
+  {id:14, name:"モバイルバッテリー(高出力)", ico:"🔋", price:5500, budget:5500,
+   rel:["lover","friend","work","husband"], age:[20,30,40], job:["business","outdoor","creative"],
+   interests:["gadget"], trend:false,
+   desc:"実用性No.1。出張や旅行の多い彼に確実に喜ばれる。"},
+  {id:15, name:"高機能ランニングシューズ", ico:"👟", price:15000, budget:15000,
+   rel:["lover","husband","friend"], age:[20,30,40], job:["outdoor"],
+   interests:["health","fashion"], trend:true,
+   desc:"走りをサポートする最新モデル。運動好きの彼の背中を押す。"},
+  {id:16, name:"名入れ革キーケース", ico:"🔑", price:7000, budget:7000,
+   rel:["lover","husband","father","friend"], age:[20,30,40,50], job:["business","creative"],
+   interests:["fashion"], trend:false,
+   desc:"毎日手にする鍵を上質に。さりげなく特別感が伝わる。"},
+  {id:17, name:"ノイズキャンセリングヘッドホン", ico:"🎚️", price:25000, budget:25000,
+   rel:["lover","husband","friend"], age:[20,30,40], job:["creative","business","indoor"],
+   interests:["gadget","relax"], trend:true,
+   desc:"静寂を贈る。集中もリラックスも思いのまま、ワンランク上の音。"},
+  {id:18, name:"ボールペン&手帳ギフト", ico:"📓", price:6500, budget:6500,
+   rel:["work","father","husband"], age:[30,40,50,60], job:["business","exec"],
+   interests:["fashion"], trend:false,
+   desc:"仕事のパートナーになる文具。ビジネスマンへの定番。"},
+  {id:19, name:"高級チョコ&ウイスキー", ico:"🍫", price:8500, budget:8500,
+   rel:["husband","father","friend","work"], age:[30,40,50,60], job:["indoor","exec"],
+   interests:["drink","coffee"], trend:false,
+   desc:"大人のマリアージュ。甘さとコクで至福のひとときを。"},
+  {id:20, name:"電動マッサージガン", ico:"💆", price:11000, budget:11000,
+   rel:["husband","father","friend","lover"], age:[30,40,50,60], job:["indoor","outdoor","business"],
+   interests:["health","relax"], trend:true,
+   desc:"凝りをほぐす自宅ケア。デスクワークや運動後の彼に。"},
+  {id:21, name:"最新スマートウォッチ", ico:"⌚", price:35000, budget:35000,
+   rel:["lover","husband","friend"], age:[20,30,40], job:["business","outdoor","exec"],
+   interests:["gadget","health","fashion"], trend:true,
+   desc:"健康管理も通知も一台で。ガジェット好きに刺さる最先端。"},
+  {id:22, name:"プレミアム日本茶セット", ico:"🍵", price:4000, budget:4000,
+   rel:["father","work","husband"], age:[50,60], job:["indoor","exec"],
+   interests:["relax","coffee"], trend:false,
+   desc:"落ち着いた時間を贈る。目上の方にも失礼のない上質な一品。"},
+];
+
+// ---- labels for reason tags & summary ----
+const REL_LABEL={lover:"恋人・パートナー",husband:"夫",father:"父・義父",work:"上司・同僚",friend:"友人・兄弟"};
+const JOB_LABEL={business:"ビジネス系",creative:"クリエイティブ系",outdoor:"アウトドア派",indoor:"おうち派",exec:"エグゼクティブ"};
+const AGE_LABEL={20:"20代",30:"30代",40:"40代",50:"50代",60:"60代〜"};
+const INT_LABEL={gadget:"ガジェット",fashion:"ファッション",drink:"お酒",health:"健康・運動",coffee:"コーヒー・食",relax:"リラックス"};
+
+// ---- scoring ----
+function scoreGift(g, ans){
+  if(g.budget > ans.budget) return null;          // over budget → exclude
+  let score=0; const intReasons=[], reasons=[];
+  if(g.rel.includes(ans.relation)){ score+=3; reasons.push(REL_LABEL[ans.relation]+"にぴったり"); }
+  if(g.age.includes(ans.age)){ score+=2; reasons.push(AGE_LABEL[ans.age]+"に人気"); }
+  if(g.job.includes(ans.job)){ score+=2; reasons.push(JOB_LABEL[ans.job]+"向き"); }
+  for(const it of ans.interests){ if(g.interests.includes(it)){ score+=2;
+    intReasons.push(INT_LABEL[it]+"好きに"); } }
+  if(g.trend){ score+=1; reasons.push("2026トレンド"); }
+  // surface the most personal reasons (interest matches) first
+  reasons.unshift(...intReasons);
+  // budget fit bonus: closer to budget cap (uses more of it) gets a touch more
+  score += Math.min(2, g.budget/Math.max(1,ans.budget)*2);
+  return {g, score, reasons, trend:g.trend};
+}
+
+function recommend(ans){
+  const scored=[];
+  for(const g of GIFTS){ const r=scoreGift(g,ans); if(r) scored.push(r); }
+  scored.sort((a,b)=> b.score-a.score);
+  return scored;
+}
+
+// ---- read form ----
+function readForm(form){
+  const get=n=>{const el=form.querySelector('input[name="'+n+'"]:checked');return el?el.value:null;};
+  const interests=[...form.querySelectorAll('input[name="interests"]:checked')].map(el=>el.value);
+  return {
+    age: get('age')?parseInt(get('age'),10):null,
+    relation: get('relation'),
+    job: get('job'),
+    budget: get('budget')?parseInt(get('budget'),10):null,
+    interests
+  };
+}
+
+// ---- render (textContent only — no innerHTML with user-derived data) ----
+function el(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e;}
+
+function renderResults(list, ans){
+  const grid=document.getElementById('resultsGrid');
+  grid.textContent='';
+  const top=list.slice(0,6);
+  top.forEach((r,i)=>{
+    const card=el('div','gift-card');
+    const thumb=el('div','gift-thumb'); thumb.textContent=r.g.ico; card.appendChild(thumb);
+    const body=el('div','gift-body');
+    body.appendChild(el('div','gift-rank','No.'+(i+1)+(r.trend?' ・ 2026 trend':'')));
+    const hr=el('div','gift-head-row');
+    hr.appendChild(el('h3',null,r.g.name));
+    body.appendChild(hr);
+    body.appendChild(el('div','price','¥'+r.g.price.toLocaleString()));
+    body.appendChild(el('div','desc',r.g.desc));
+    const reasons=el('div','reasons');
+    r.reasons.slice(0,3).forEach(rs=>reasons.appendChild(el('span','reason',rs)));
+    const match=el('span','match','適合 '+Math.min(99,Math.round(r.score/12*100))+'%');
+    reasons.appendChild(match);
+    body.appendChild(reasons);
+    card.appendChild(body);
+    grid.appendChild(card);
+  });
+  // summary
+  const relTxt=ans.relation?REL_LABEL[ans.relation]:'相手';
+  const ageTxt=ans.age?AGE_LABEL[ans.age]+'・':'';
+  const budTxt=ans.budget>=999999?'ご予算たっぷり':'〜¥'+ans.budget.toLocaleString();
+  const sum=document.getElementById('resultSummary');
+  sum.textContent=ageTxt+relTxt+'／'+budTxt+' の条件で、'+top.length+'件の候補が見つかりました。上位から順にご覧ください。';
+}
+
+// ---- fallback when nothing matches (e.g., very low budget) ----
+function renderFallback(ans){
+  const grid=document.getElementById('resultsGrid');
+  grid.textContent='';
+  const cheap=[...GIFTS].sort((a,b)=>a.price-b.price).slice(0,3)
+    .map(g=>({g,score:6,reasons:['予算に合わせた提案'],trend:g.trend}));
+  cheap.forEach((r,i)=>{
+    const card=el('div','gift-card');
+    const thumb=el('div','gift-thumb'); thumb.textContent=r.g.ico; card.appendChild(thumb);
+    const body=el('div','gift-body');
+    body.appendChild(el('div','gift-rank','おすすめ'));
+    const hr=el('div','gift-head-row'); hr.appendChild(el('h3',null,r.g.name)); body.appendChild(hr);
+    body.appendChild(el('div','price','¥'+r.g.price.toLocaleString()));
+    body.appendChild(el('div','desc',r.g.desc));
+    const reasons=el('div','reasons'); r.reasons.forEach(rs=>reasons.appendChild(el('span','reason',rs)));
+    body.appendChild(reasons); card.appendChild(body); grid.appendChild(card);
+  });
+  document.getElementById('resultSummary').textContent='ご予算に合う候補を、お手頃な順にご提案します。';
+}
+
+// ---- form submit ----
+const form=document.getElementById('giftForm');
+form.addEventListener('submit',function(e){
+  e.preventDefault();
+  const ans=readForm(form);
+  const err=document.getElementById('formError');
+  const missing=[];
+  if(!ans.age)missing.push('年代');
+  if(!ans.relation)missing.push('関係');
+  if(!ans.job)missing.push('タイプ');
+  if(!ans.budget)missing.push('予算');
+  if(missing.length){ err.textContent='Q'+' '+missing.join('・')+' を選んでください。'; return; }
+  err.textContent='';
+  const list=recommend(ans);
+  const section=document.getElementById('results');
+  section.classList.remove('results-hidden');
+  if(list.length===0){ renderFallback(ans); } else { renderResults(list, ans); }
+  section.querySelectorAll('.reveal').forEach(r=>r.classList.add('in'));
+  setTimeout(()=>document.getElementById('results').scrollIntoView({behavior:'smooth'}),80);
+});
+
+document.getElementById('resetBtn').addEventListener('click',function(){
+  document.getElementById('formError').textContent='';
+  document.getElementById('results').classList.add('results-hidden');
+});
+
+// ---- catalog render ----
+(function renderCatalog(){
+  const grid=document.getElementById('catalogGrid');
+  GIFTS.forEach(g=>{
+    const it=el('div','cat-item');
+    it.appendChild(el('div','ci-ico',g.ico));
+    it.appendChild(el('h4',null,g.name));
+    it.appendChild(el('div','ci-price','¥'+g.price.toLocaleString()+(g.trend?' ・ 2026':'')));
+    grid.appendChild(it);
+  });
+})();
+
+// ---- scroll reveal ----
+(function(){
+  const els=document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window)){ els.forEach(e=>e.classList.add('in')); return; }
+  const io=new IntersectionObserver((ents)=>{
+    ents.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+  },{threshold:.12});
+  els.forEach(e=>io.observe(e));
+})();
+</script>
+</body>
+</html>
