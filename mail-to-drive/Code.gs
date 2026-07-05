@@ -246,3 +246,54 @@ function setupTrigger() {
 
   Logger.log('自動実行トリガーを登録しました（15分ごと）。');
 }
+
+/** ==========================================================
+ *  ★ 元に戻す（アンドゥ）★
+ *  この関数を1回実行すると、これまでの動作をまとめて取り消します。
+ *    1. 自動実行トリガーを全部削除（＝もう勝手に動かない）
+ *    2. Gmailの「ファイル整理済み」ラベルを外し、メールを未読に戻す
+ *    3. Driveに作った保存フォルダをゴミ箱へ移動
+ *  ※メール本体は消えません。Driveのファイルもゴミ箱に入るだけ（完全削除ではない）
+ *  ========================================================== */
+function undoEverything() {
+  // 1) トリガーを全部止める
+  const triggers = ScriptApp.getProjectTriggers();
+  triggers.forEach(function (t) {
+    if (t.getHandlerFunction() === 'processIncomingMail') {
+      ScriptApp.deleteTrigger(t);
+    }
+  });
+  Logger.log('① 自動実行トリガーを停止しました。');
+
+  // 2) Gmailを元の状態（未読・ラベル無し）に戻す
+  const label = GmailApp.getUserLabelByName(CONFIG.PROCESSED_LABEL);
+  if (label) {
+    const threads = label.getThreads();
+    threads.forEach(function (thread) {
+      thread.removeLabel(label);
+      thread.markUnread();
+    });
+    Logger.log('② ' + threads.length + '件のメールを未読に戻し、ラベルを外しました。');
+    // ラベル自体も削除
+    GmailApp.deleteLabel(label);
+  } else {
+    Logger.log('② 処理済みラベルはありませんでした。');
+  }
+
+  // 3) Driveに作った保存フォルダをゴミ箱へ
+  //    （マイドライブに作った場合のみ。共有ドライブ指定時は安全のため触りません）
+  if (!CONFIG.ROOT_FOLDER_ID) {
+    const it = DriveApp.getRootFolder().getFoldersByName(CONFIG.ROOT_FOLDER_NAME);
+    if (it.hasNext()) {
+      const folder = it.next();
+      folder.setTrashed(true); // ゴミ箱へ（完全削除ではない）
+      Logger.log('③ フォルダ「' + CONFIG.ROOT_FOLDER_NAME + '」をゴミ箱へ移動しました。');
+    } else {
+      Logger.log('③ 保存フォルダは見つかりませんでした。');
+    }
+  } else {
+    Logger.log('③ 共有ドライブ指定のため、フォルダの自動削除はスキップしました（手動で確認してください）。');
+  }
+
+  Logger.log('=== 取り消し完了。元の状態に戻しました。 ===');
+}
