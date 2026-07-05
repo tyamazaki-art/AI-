@@ -14,7 +14,20 @@
  *  設定エリア（ここだけ自分用に書き換えればOK）
  *  ========================================================== */
 const CONFIG = {
-  // 添付を保存する「親フォルダ」の名前。Drive内に無ければ自動で作られる。
+  // 保存先の「親フォルダ」の指定方法は2通り。どちらか一方を使う。
+  //
+  //  ▼ 方法A: マイドライブに自動で作る（初期設定）
+  //     ROOT_FOLDER_ID を '' のままにすると、下の ROOT_FOLDER_NAME の
+  //     フォルダが自分のマイドライブに作られる。
+  //
+  //  ▼ 方法B: 会社の共有ドライブ等、既存フォルダに入れる（おすすめ）
+  //     保存したいフォルダをブラウザで開き、URL末尾のIDをここに貼る。
+  //     例: https://drive.google.com/drive/folders/★この部分★
+  //     ROOT_FOLDER_ID に貼ると、そのフォルダの中に振り分け保存される。
+  //     （共有ドライブの場合は、あなたに「編集者」以上の権限が必要）
+  ROOT_FOLDER_ID: '',
+
+  // 添付を保存する「親フォルダ」の名前（方法Aのときだけ使われる）。
   ROOT_FOLDER_NAME: '自動整理ボックス',
 
   // どのルールにも当てはまらなかったファイルの保存先フォルダ名
@@ -59,7 +72,8 @@ const CONFIG = {
  *  ========================================================== */
 function processIncomingMail() {
   const label = getOrCreateLabel_(CONFIG.PROCESSED_LABEL);
-  const rootFolder = getOrCreateFolder_(DriveApp.getRootFolder(), CONFIG.ROOT_FOLDER_NAME);
+  const rootFolder = resolveRootFolder_();
+  const rootName = rootFolder.getName(); // 通知・ログ表示用の実際のフォルダ名
   const folderCache = {}; // フォルダ名 -> Folder のキャッシュ
 
   const threads = GmailApp.search(CONFIG.SEARCH_QUERY, 0, CONFIG.MAX_THREADS);
@@ -96,8 +110,8 @@ function processIncomingMail() {
         const finalName = uniqueFileName_(targetFolder, fileName);
         targetFolder.createFile(att.copyBlob().setName(finalName));
 
-        savedItems.push({ file: finalName, folder: folderName, from: message.getFrom() });
-        Logger.log('保存: ' + finalName + ' → ' + CONFIG.ROOT_FOLDER_NAME + '/' + folderName);
+        savedItems.push({ file: finalName, folder: rootName + '/' + folderName, from: message.getFrom() });
+        Logger.log('保存: ' + finalName + ' → ' + rootName + '/' + folderName);
       });
     });
 
@@ -114,6 +128,23 @@ function processIncomingMail() {
 /** ==========================================================
  *  補助関数
  *  ========================================================== */
+
+/** 保存先の親フォルダを決める（共有ドライブのフォルダID指定にも対応） */
+function resolveRootFolder_() {
+  // 方法B: フォルダIDが指定されていれば、そのフォルダを使う（共有ドライブ可）
+  if (CONFIG.ROOT_FOLDER_ID) {
+    try {
+      return DriveApp.getFolderById(CONFIG.ROOT_FOLDER_ID);
+    } catch (e) {
+      throw new Error(
+        'ROOT_FOLDER_ID のフォルダが見つからないか、アクセス権がありません。' +
+        'IDが正しいか、そのフォルダの編集権限があるか確認してください。元エラー: ' + e.message
+      );
+    }
+  }
+  // 方法A: マイドライブ直下に名前でフォルダを用意
+  return getOrCreateFolder_(DriveApp.getRootFolder(), CONFIG.ROOT_FOLDER_NAME);
+}
 
 /** ファイル名・件名から保存先フォルダ名を決める */
 function decideFolder_(fileName, subject) {
@@ -184,7 +215,7 @@ function sendSummary_(items) {
   if (!to) return;
 
   const lines = items.map(function (it) {
-    return '・' + it.file + '  →  ' + CONFIG.ROOT_FOLDER_NAME + '/' + it.folder;
+    return '・' + it.file + '  →  ' + it.folder;
   });
 
   const body =
